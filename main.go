@@ -13,7 +13,7 @@ func getUserData() (float64, string, string) {
 	for {
 		fmt.Printf("Из валюты (%s, %s, %s): ", vald, vale, valr)
 		fmt.Scan(&ufrom)
-		if ufrom == "usd" || ufrom == "eur" || ufrom == "rub" {
+		if checkFromVal(ufrom) {
 			break
 		}
 		fmt.Println("Неверно указана валюта")
@@ -21,7 +21,7 @@ func getUserData() (float64, string, string) {
 	for {
 		fmt.Print("Сумма: ")
 		fmt.Scan(&usum)
-		if usum > 0 {
+		if checkSum(usum) {
 			break
 		}
 		fmt.Println("Неверно указана сумма")
@@ -38,13 +38,23 @@ func getUserData() (float64, string, string) {
 	for {
 		fmt.Printf("В валюту (%s): ", otherVals)
 		fmt.Scan(&uto)
-		if (uto == "usd" || uto == "eur" || uto == "rub") && uto != ufrom {
+		if checkToVal(uto, ufrom) {
 			break
 		}
 		fmt.Println("Неверно указана валюта")
 	}
 	return usum, ufrom, uto
+}
 
+func checkFromVal(ufrom string) bool {
+	return ufrom == "usd" || ufrom == "eur" || ufrom == "rub" 
+}
+
+func checkSum(summa float64) bool {
+	return summa > 0
+}
+func checkToVal(uto, ufrom string) bool {
+	return (uto == "usd" || uto == "eur" || uto == "rub") && uto != ufrom 
 }
 
 func calcResult(summa float64, fromVal string, toVal string) float64 {
@@ -59,7 +69,7 @@ func calcResult(summa float64, fromVal string, toVal string) float64 {
 	case fromVal == "usd" && toVal == "rub":
 		result = summa * cUSDtoRUB		
 	case fromVal == "rub" && toVal == "usd":
-		result = summa / cUSDtoEUR		
+		result = summa / cUSDtoRUB		
 	case fromVal == "eur" && toVal == "rub":
 		result = summa * cUSDtoRUB	/ cUSDtoEUR	
 	case fromVal == "rub" && toVal == "eur":
