@@ -61,21 +61,15 @@ func calcResult(summa float64, fromVal string, toVal string) float64 {
 	const cUSDtoEUR = 0.85
 	const cUSDtoRUB = 75.76
 	var result float64
-	switch {
-	case fromVal == "usd" && toVal == "eur":
-		result = summa * cUSDtoEUR		
-	case fromVal == "eur" && toVal == "usd":
-		result = summa / cUSDtoEUR		
-	case fromVal == "usd" && toVal == "rub":
-		result = summa * cUSDtoRUB		
-	case fromVal == "rub" && toVal == "usd":
-		result = summa / cUSDtoRUB		
-	case fromVal == "eur" && toVal == "rub":
-		result = summa * cUSDtoRUB	/ cUSDtoEUR	
-	case fromVal == "rub" && toVal == "eur":
-		result = summa / cUSDtoRUB * cUSDtoEUR		
-	}
-	//EURtoRUB := 1 / cUSDtoEUR * cUSDtoRUB
+	type tcurval map[string]float64
+	type tcur map[string]tcurval
+
+	curvalmap := tcur{}
+	curvalmap["usd"] = tcurval{"eur": cUSDtoEUR, "rub": cUSDtoRUB}
+	curvalmap["eur"] = tcurval{"usd": 1 / cUSDtoEUR, "rub": cUSDtoRUB / cUSDtoEUR}
+	curvalmap["rub"] = tcurval{"eur": 1 / (cUSDtoRUB * cUSDtoEUR), "usd": 1 / cUSDtoRUB}
+
+	result = summa * curvalmap[fromVal][toVal]
 	fmt.Printf("%0.2f %s = %.2f %s", summa, fromVal, result, toVal)
 	return result
 }
