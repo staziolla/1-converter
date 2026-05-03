@@ -1,8 +1,9 @@
 package file
 
-import ("os"
-		"fmt"
-		"strings"
+import (
+	"fmt"
+	"os"
+	"strings"
 )
 
 //Чтение любого файла
@@ -10,7 +11,7 @@ import ("os"
 
 func ReadAnyFile(filename string) ([]byte, error) {
 	file, err := os.ReadFile(filename)
-	if err!=nil {
+	if err != nil {
 		fmt.Println("Ошибка чтения файла")
 		return nil, err
 	}
@@ -18,5 +19,5 @@ func ReadAnyFile(filename string) ([]byte, error) {
 }
 
 func IsJsonFile(filename string) bool {
-	return strings.ToLower(filename)[len(filename) - 5:] == ".json" 
+	return strings.HasSuffix(strings.ToLower(filename), ".json")
 }
