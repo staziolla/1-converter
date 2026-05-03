@@ -5,13 +5,13 @@ import (
 )
 
 type Bin struct {
-	id        string
-	private   bool
-	createdAt time.Time
-	name      string
+	Id        string
+	Private   bool
+	CreatedAt time.Time
+	Name      string
 }
 
 func CreateBin(id string, private bool, createdAt time.Time, name string) *Bin {
-	b := Bin{id: id, private: private, createdAt: createdAt, name: name}
+	b := Bin{Id: id, Private: private, CreatedAt: createdAt, Name: name}
 	return &b
 }
