@@ -1,11 +1,13 @@
 package main
-import ("fmt"
-		"strings"
-		"slices"
-		"os"
-		"bufio"
-		"strconv"
-		)
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"slices"
+	"strconv"
+	"strings"
+)
 
 func main() {
 	oper, data := getUserInput()
@@ -15,25 +17,32 @@ func main() {
 	fmt.Printf("Результат %s для %v = %f\n", oper, data, res)
 }
 
-func calcOper(oper string, data []float64) float64{
+func calcOper(oper string, data []float64) float64 {
 	var result float64
 	ldata := len(data)
 	if ldata == 0 {
 		return result
 	}
-	switch {
-	case oper == "SUM":
-		result = getSum(data)
-	case oper == "AVG":
-		result = getSum(data) / float64(len(data))
-	case oper == "MED":
-		slices.Sort(data)
-		if ldata%2 == 0 {
-			result = (data[ldata / 2] + data[ldata / 2 - 1]) / 2
-		} else {
-			result = data[(ldata - 1) / 2]
-		}
+	opermap := map[string]func([]float64) float64{
+		"SUM": getSum,
+		"AVG": getAvg,
+		"MED": getMed,
 	}
+	// switch {
+	// case oper == "SUM":
+	// 	result = getSum(data)
+	// case oper == "AVG":
+	// 	result = getSum(data) / float64(len(data))
+	// case oper == "MED":
+	// 	slices.Sort(data)
+	// 	if ldata%2 == 0 {
+	// 		result = (data[ldata / 2] + data[ldata / 2 - 1]) / 2
+	// 	} else {
+	// 		result = data[(ldata - 1) / 2]
+	// 	}
+	// }
+	fnc := opermap[oper]
+	result = fnc(data)
 	return result
 }
 
@@ -43,6 +52,20 @@ func getSum(arr []float64) float64 {
 		s += value
 	}
 	return s
+}
+
+func getAvg(arr []float64) float64 {
+	return getSum(arr) / float64(len(arr))
+}
+
+func getMed(data []float64) float64 {
+	slices.Sort(data)
+	ldata := len(data)
+	if ldata%2 == 0 {
+		return (data[ldata/2] + data[ldata/2-1]) / 2
+	} else {
+		return data[(ldata-1)/2]
+	}
 }
 
 func getUserInput() (string, []float64) {
@@ -65,7 +88,7 @@ func getUserInput() (string, []float64) {
 	fmt.Println("Укажите значения через запятую и пробел")
 	s, _ := reader.ReadString('\n')
 	s = strings.TrimSpace(s)
- 	sarr := strings.Split(s, ",")
+	sarr := strings.Split(s, ",")
 	for _, value := range sarr {
 		value = strings.TrimSpace(value)
 		if value == "" {
@@ -80,6 +103,4 @@ func getUserInput() (string, []float64) {
 		data = append(data, x)
 	}
 	return oper, data
-}	
-
-
+}
