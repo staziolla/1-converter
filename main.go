@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+
+//	vault := account.NewVault(files.NewJsonDB("data.json"))
+
 	BinList := []bins.Bin{}
 	ptr := bins.CreateBin("qqq", true, time.Now(), "aaaa")
 	BinList = append(BinList, *ptr)

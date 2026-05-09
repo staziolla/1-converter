@@ -10,6 +10,7 @@ import (
 //Сохранение bin в виде json в локальном файле
 //Чтение списка bin в виде json из локального файла
 
+
 func SaveBinToFile(filename string, bslice []bins.Bin) error {
 	file, err := os.Create(filename)
 	if err != nil {
