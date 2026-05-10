@@ -7,9 +7,18 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"github.com/joho/godotenv"
+	"demo/2-calc/config"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	cnf := config.NewConfig()
+	fmt.Println(cnf)
+
 	oper, data := getUserInput()
 	fmt.Println(oper)
 	fmt.Println(data)
